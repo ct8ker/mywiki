@@ -1,0 +1,98 @@
+<div class="row">
+    <div class="col-md-12">
+        <h1>Tags</h1>
+        <blockquote>
+            <p class="lead">Article tags</p>
+        </blockquote>
+    </div>
+    <% if user_signed_in? %>
+    <p>
+        <button id="addTagButton" class="btn btn-primary" data-toggle="modal">Add new tag</button>
+    </p>
+    <% end %>
+    <div id="tagList" class="list-group">
+    <% @tags.each do |tag| %>
+        <%= link_to(tag.name, url_for(controller: :tags, action: :edit, id: tag.id), class: 'list-group-item') %>
+    <% end %>
+    </div>
+</div>
+<script type="text/javascript">
+    window.mywiki = window.mywiki || {};
+
+    $(function() {
+        var formDialog = new mywiki.Dialog();
+
+        var initDialog = function(data, onSuccess) {
+            formDialog.init(data.html, function() {
+                var form = $("#submitForm");
+                var onError = function(event, jqXHR, ajaxSettings, thrownError) {
+                    var data = $.parseJSON(jqXHR.responseText);
+                    if (jqXHR.status === 422) {
+                        mywiki.notifyErrors(data.errors);
+                    } else {
+                        alert("System error");
+                        formDialog.setOnClose(function() { location.reload(); });
+                        formDialog.close();
+                    }
+                };
+
+                form.on("ajax:success", onSuccess);
+                form.on("ajax:error", onError);
+
+                $("#saveButton").bind("click", function () {
+                    form.submit();
+                });
+
+                $("#closeButton").unbind().bind("click", function() {
+                    formDialog.close();
+                });
+
+                var deleteForm = $("#deleteForm");
+                if (deleteForm) {
+                    deleteForm.on("ajax:success", onSuccess);
+                    deleteForm.on("ajax:error", onError);
+
+                    $("#deleteButton").bind("click", function() {
+                       if (confirm("Are you sure?")) {
+                           deleteForm.submit();
+                       }
+                    });
+                }
+            });
+        };
+
+        $("#addTagButton").bind("click", function() {
+            $.ajax({
+                type: "GET",
+                url: "<%= url_for(controller: :tags, action: :new) %>",
+                success: function(data) {
+                    initDialog(data, function(event, xhr, settings) {
+                        alert("Succeed.");
+                        formDialog.setOnClose(function() { location.reload(); });
+                        formDialog.close();
+                    });
+                    formDialog.show({backdrop: "static"});
+                }
+            });
+        });
+
+        $(".list-group-item", "#tagList").each(function() {
+            var url = $(this).attr("href");
+            $(this).attr("href", "#").bind("click", function() {
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    success: function(data) {
+                        initDialog(data, function(event, xhr, settings) {
+                            alert("Succeed.");
+                            formDialog.setOnClose(function() { location.reload(); });
+                            formDialog.close();
+                        });
+                        formDialog.show({backdrop: "static"});
+                    }
+                });
+                return false;
+            });
+        });
+    });
+</script>

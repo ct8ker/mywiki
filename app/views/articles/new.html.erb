@@ -1,0 +1,89 @@
+<div class="row">
+    <div class="col-md-12">
+        <h1><%= @article.id.blank? ? 'New' : 'Edit' %> Article</h1>
+        <blockquote>
+            <p class="lead">Use markdown style.</p>
+        </blockquote>
+
+        <%= error_messages_for(@article) %>
+
+        <%= form_for @article, :authenticity_token => true, html: {id: 'submitForm', class: 'form-horizontal', role: 'form'} do |f| %>
+            <div class="form-group">
+                <label for="title" class="col-sm-2 control-label">Title</label>
+                <div class="col-sm-10">
+                    <%= f.text_field :title, class: 'form-control', placeholder: 'Title' %>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="content" class="col-sm-2 control-label">Content</label>
+                <div class="col-sm-10">
+                    <%= f.text_area :content, class: 'form-control', placeholder: 'Content', rows: 10 %>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="content" class="col-sm-2 control-label">Tags</label>
+                <div class="col-sm-10">
+                    <% if @article.id.blank? %>
+                        <%= text_field_tag 'tag[name][]', '', class: 'tag-name form-control' %>
+                        <%= text_field_tag 'tag[name][]', '', class: 'tag-name form-control' %>
+                        <%= text_field_tag 'tag[name][]', '', class: 'tag-name form-control' %>
+                    <% else %>
+                        <% @article.tags.each do |tag| %>
+                          <%= text_field_tag 'tag[name][]', '', class: 'tag-name form-control', value: tag.name %>
+                        <% end %>
+                    <% end %>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="private" class="col-sm-2 control-label">Private</label>
+                <div class="col-sm-10">
+                    <div class="radio">
+                        <label>
+                            <%= f.radio_button :private, 1 %> Private
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <%= f.radio_button :private, 0 %> Public
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <%= f.submit 'Submit', class: 'btn btn-primary' %>
+                    <button id="previewButton" class="btn btn-info" data-toggle="modal">Preview</button>
+                </div>
+            </div>
+        <% end %>
+        <div id="preview"></div>
+    </div>
+</div>
+<script type="text/javascript">
+    // Auto complete candidates
+    var tags = <%= tags %>;
+
+    // Preview button click
+    $("#previewButton").bind("click", function() {
+        var content = $("#article_content").val();
+        if (content) {
+            $.ajax({
+                type: "POST",
+                url: "<%= url_for(controller: :articles, action: :preview) %>",
+                data: "article[content]=" + encodeURIComponent(content),
+                success: function (data) {
+                    $("#preview").html("<h2><small>Preview</small></h2>" + data.preview);
+                }
+            });
+        }
+        return false;
+    });
+
+    // Tag auto complete
+    $("input.tag-name").each(function() {
+        $(this).autocomplete({
+            source: tags
+        });
+    });
+</script>

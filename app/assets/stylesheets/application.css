@@ -1,0 +1,30 @@
+/*
+ *= require_tree .
+ *= require_self
+ */
+#container {
+    padding-top: 50px;
+}
+
+#tab {
+    margin-top: 15px;
+}
+
+#tagList a.list-group-item {
+    float: left;
+    width: auto;
+    margin: 5px 5px 0 0;
+}
+
+.history-panel {
+    width: 80%;
+    margin: 0 auto 20px;
+}
+
+.gray {
+    color: gray;
+}
+
+input.tag-name {
+    margin-bottom: 5px;
+}

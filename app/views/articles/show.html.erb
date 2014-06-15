@@ -1,0 +1,14 @@
+<div class="row">
+    <div class="col-md-12">
+        <h1>
+            <%= @article.title %>
+            <% if user_signed_in? && current_user.id == @article.user_id %>
+                <%= link_to('Edit', {action: :edit, id: @article.id}, class: "btn btn-primary pull-right") %>
+            <% end %>
+        </h1>
+        <hr>
+        <div id="article">
+            <%= markdown(@article.content) %>
+        </div>
+    </div>
+</div>

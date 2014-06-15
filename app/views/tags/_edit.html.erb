@@ -1,0 +1,21 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+  <h4 class="modal-title" id="myModalLabel">Edit Tag</h4>
+</div>
+<div class="modal-body">
+  <%= form_for @tag, remote: true, :authenticity_token => true, html: {id: "submitForm"} do |f| %>
+      <div class="form-group">
+        <label for="tagName">Name</label>
+        <%= f.text_field :name, class: 'form-control', id: 'tagName', placeholder: 'Tag name' %>
+      </div>
+      <%= f.hidden_field :lock_version %>
+  <% end %>
+  <%= form_for @tag, method: :DELETE, remote: true, :authenticity_token => true, html: {id: "deleteForm"} do |f| %>
+      <%= f.hidden_field :lock_version %>
+  <% end %>
+</div>
+<div class="modal-footer">
+  <button type="button" id="deleteButton" class="btn btn-primary">Delete</button>
+  <button type="button" id="saveButton" class="btn btn-primary">Save</button>
+  <button type="button" id="closeButton" class="btn btn-default" data-dismiss="modal">Close</button>
+</div>
