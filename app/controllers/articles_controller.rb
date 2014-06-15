@@ -31,6 +31,7 @@ class ArticlesController < ApplicationController
   #
   def edit
     @article = current_user.articles.find(params[:id])
+    raise ActiveRecord::RecordNotFound unless @article
     render action: :new
   end
 
@@ -76,6 +77,8 @@ class ArticlesController < ApplicationController
   #
   def update
     @article = current_user.articles.find(params[:id])
+    raise ActiveRecord::RecordNotFound unless @article
+
     @article.attributes = article_params
     tag_names = tag_params[:name]
     tag_names.delete("")

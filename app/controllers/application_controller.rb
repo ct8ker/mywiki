@@ -33,7 +33,7 @@ class ApplicationController < ActionController::Base
   rescue_from ActiveRecord::RecordNotFound,         with: :error_404
   rescue_from ActionController::UnknownController,  with: :error_404
   rescue_from ActionController::RoutingError,       with: :error_404
-  rescue_from Exception,                            with: :error_500
+  # rescue_from StandardError,                        with: :error_500
 
   #
   # 404 error page

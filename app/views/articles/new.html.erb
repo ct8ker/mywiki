@@ -31,6 +31,9 @@
                         <% @article.tags.each do |tag| %>
                           <%= text_field_tag 'tag[name][]', '', class: 'tag-name form-control', value: tag.name %>
                         <% end %>
+                        <% if @article.tags.size == 0 %>
+                          <%= text_field_tag 'tag[name][]', '', class: 'tag-name form-control' %>
+                        <% end %>
                     <% end %>
                 </div>
             </div>
