@@ -22,19 +22,20 @@
             </div>
             <div class="form-group">
                 <label for="content" class="col-sm-2 control-label">Tags</label>
-                <div class="col-sm-10">
+                <div id="tagInput" class="col-sm-10">
                     <% if @article.id.blank? %>
-                        <%= text_field_tag 'tag[name][]', '', class: 'tag-name form-control' %>
-                        <%= text_field_tag 'tag[name][]', '', class: 'tag-name form-control' %>
-                        <%= text_field_tag 'tag[name][]', '', class: 'tag-name form-control' %>
+                        <%= text_field_tag 'tag[name][]', '', id: "tag_name_1", class: 'tag-name form-control' %>
                     <% else %>
-                        <% @article.tags.each do |tag| %>
-                          <%= text_field_tag 'tag[name][]', '', class: 'tag-name form-control', value: tag.name %>
+                        <% @article.tags.each_with_index do |tag, idx| %>
+                          <%= text_field_tag 'tag[name][]', '', id: "tag_name_#{idx + 1}", class: 'tag-name form-control', value: tag.name %>
                         <% end %>
                         <% if @article.tags.size == 0 %>
-                          <%= text_field_tag 'tag[name][]', '', class: 'tag-name form-control' %>
+                          <%= text_field_tag 'tag[name][]', '', id: "tag_name_1", class: 'tag-name form-control' %>
                         <% end %>
                     <% end %>
+                    <div class="text-right">
+                        <button id="addTagButton" class="btn btn-sm btn-info">Add tag</button>
+                    </div>
                 </div>
             </div>
             <div class="form-group">
@@ -56,7 +57,7 @@
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <%= f.submit 'Submit', class: 'btn btn-primary' %>
-                    <button id="previewButton" class="btn btn-info" data-toggle="modal">Preview</button>
+                    <button id="previewButton" class="btn btn-info">Preview</button>
                 </div>
             </div>
         <% end %>
@@ -80,6 +81,15 @@
                 }
             });
         }
+        return false;
+    });
+
+    // Add tag button click
+    $("#addTagButton").bind("click", function() {
+        var nextId = "tag_name_" + ($("input", "#tagInput").size() + 1);
+        var input = $("<input class=\"tag-name form-control\" id=\"" + nextId + "\" name=\"tag[name][]\" type=\"text\">");
+        input.autocomplete({ source: tags });
+        $(this).parent("div").before(input);
         return false;
     });
 
