@@ -41,17 +41,23 @@ class TagsController < ApplicationController
     if request.xhr?
       tag = Tag.new(tag_params)
 
-      unless tag.valid?
+      if tag.valid?
+        begin
+          Tag.transaction do
+            tag.save
+          end
+        rescue ActiveRecord::RecordNotUnique
+          tag.errors.add(:name, "has already been taken.")
+        end
+      end
+
+      if tag.errors.any?
         errors = {}
         tag.errors.messages.each {|k, v| errors[k] = tag.errors.full_messages_for(k)}
-        render json: {errors: errors}, status: 422 and return
+        render json: {errors: errors}, status: 422
+      else
+        render json: {tag: tag}, status: 200
       end
-
-      Tag.transaction do
-        tag.save
-      end
-
-      render json: {tag: tag}, status: 200
     end
   end
 
@@ -63,23 +69,22 @@ class TagsController < ApplicationController
       tag = Tag.find(params[:id])
       tag.attributes = tag_params
 
-      unless tag.valid?
-        errors = {}
-        tag.errors.messages.each {|k, v| errors[k] = tag.errors.full_messages_for(k)}
-        render json: {errors: errors}, status: 422 and return
-      end
-
       stale_object_error = false
-      begin
-        Tag.transaction do
-          tag.save
+      if tag.valid?
+        begin
+          Tag.transaction do
+            tag.save
+          end
+        rescue ActiveRecord::RecordNotUnique
+          tag.errors.add(:name, "has already been taken.")
+        rescue ActiveRecord::StaleObjectError
+          stale_object_error = true
         end
-      rescue ActiveRecord::StaleObjectError
-        stale_object_error = true
       end
 
-      if stale_object_error
-        errors = {stale_object_error: ['Tag is already modified by others.']}
+      if tag.errors.any?
+        errors = stale_object_error ? {stale_object_error: ['Tag is already modified by others.']} : {}
+        tag.errors.messages.each {|k, v| errors[k] = tag.errors.full_messages_for(k)}
         render json: {errors: errors}, status: 422
       else
         render json: {}, status: 200
