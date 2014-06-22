@@ -1,1 +1,27 @@
-aaaa
+<div class="row">
+    <div class="col-md-12">
+        <h1>Articles tagged with '<%= @tag.name %>'</h1>
+        <% if @articles.size > 0 %>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Updated at</th>
+                    <tr>
+                </thead>
+                <tbody>
+                <% @articles.each do |article|%>
+                    <tr>
+                        <td><%= link_to article.title, action: :show, title: article.title %></td>
+                        <td><%= article.user.login_id %></td>
+                        <td><%= l article.updated_at, format: '%Y/%m/%d %H:%M:%S' %></td>
+                    </tr>
+                <% end %>
+                </tbody>
+            </table>
+        <% else %>
+            <div class="alert alert-warning">No articles found.</div>
+        <% end %>
+    </div>
+</div>

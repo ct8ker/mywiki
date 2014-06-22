@@ -3,52 +3,7 @@
     <h1>My Wiki</h1>
     <hr>
     <div id="article">
-      <div id="article">
-        <h3><strong>このサイトについて</strong></h3>
-
-        <p>個人的メモを気軽に保存しておくための簡易なwikiです。<br>
-          記事の入力はMarkdown記法に対応しています。</p>
-        <hr>
-
-        <h4><strong>出来ること</strong></h4>
-
-        <ul>
-            <li><a href="users/sign_up" title="ユーザー登録" rel="nofollow">ユーザー登録</a></li>
-            <li><a href="users/sign_in" title="ユーザーログイン" rel="nofollow">ユーザーログイン</a>（投稿するにはログインが必要です）</li>
-            <li>Markdown記法での投稿（Syntax highlightも対応しています）</li>
-            <li>公開記事と自分用記事の区別</li>
-            <li>記事のタグ付け</li>
-        </ul>
-
-        <h4><strong>まだ出来ないこと（出来るようになる予定）</strong></h4>
-
-        <ul>
-            <li>自分の投稿項目一覧</li>
-            <li>タグ別の投稿項目一覧</li>
-            <li>記事に「いいね」</li>
-        </ul>
-
-        <hr>
-
-        <h4><strong>技術的な事</strong></h4>
-
-        <p>Rails4.1を使って開発しています。</p>
-<pre><code class="highlight"><span class="n">gem</span> <span class="s1">'rails'</span><span class="p">,</span> <span class="s1">'4.1.0'</span>
-</code></pre>
-
-        <p>Markdownのパーサーはこちらを使いました。</p>
-<pre><code class="highlight"><span class="n">gem</span> <span class="s1">'redcarpet'</span>
-</code></pre>
-
-        <p>Syntax highlightはこちらを。</p>
-<pre><code class="highlight"><span class="n">gem</span> <span class="s1">'rouge'</span>
-</code></pre>
-
-        <p>認証周りはdeviseです。</p>
-<pre><code class="highlight"><span class="n">gem</span> <span class="s1">'devise'</span>
-</code></pre>
-
-      </div>
+      <%= markdown(@article.content) %>
     </div>
   </div>
 </div>

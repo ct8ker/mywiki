@@ -3,9 +3,19 @@
 #
 class ArticlesController < ApplicationController
 
-  before_filter :authenticate_user!, except: [:show]
+  before_filter :authenticate_user!, except: [:index, :show]
 
+  #
+  # Article list
+  #
   def index
+    @tag = Tag.find_by_name(params[:tag_name])
+    raise ActiveRecord::RecordNotFound unless @tag
+
+    if request.xhr?
+    else
+      @articles = Article.search_by_tag(@tag.id)
+    end
   end
 
   #
@@ -58,10 +68,7 @@ class ArticlesController < ApplicationController
       ActiveRecord::Base.transaction do
         tag_names.each do |tag_name|
           tag = Tag.find_by_name(tag_name)
-          unless tag
-            tag = Tag.new(name: tag_name)
-            tag.save
-          end
+          tag = Tag.new(name: tag_name) unless tag
           @article.tags << tag
         end
         @article.save
@@ -90,10 +97,7 @@ class ArticlesController < ApplicationController
         end
         tag_names.each do |tag_name|
           tag = Tag.find_by_name(tag_name)
-          unless tag
-            tag = Tag.new(name: tag_name)
-            tag.save
-          end
+          tag = Tag.new(name: tag_name) unless tag
           @article.tags << tag unless @article.tags.include?(tag)
         end
         @article.save

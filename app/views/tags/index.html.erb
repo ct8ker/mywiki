@@ -12,7 +12,11 @@
     <% end %>
     <div id="tagList" class="list-group">
     <% @tags.each do |tag| %>
-        <%= link_to(tag.name, url_for(controller: :tags, action: :edit, id: tag.id), class: 'list-group-item') %>
+        <% if user_signed_in? %>
+            <%= link_to(tag.name, url_for(controller: :tags, action: :edit, id: tag.id), class: 'list-group-item') %>
+        <% else %>
+            <%= link_to(tag.name, url_for(controller: :articles, action: :index, tag_name: tag.name), class: 'list-group-item') %>
+        <% end %>
     <% end %>
     </div>
 </div>
@@ -20,6 +24,7 @@
     window.mywiki = window.mywiki || {};
 
     $(function() {
+        var loggedIn = <%= user_signed_in? %>;
         var formDialog = new mywiki.Dialog();
 
         var initDialog = function(data, onSuccess) {
@@ -79,18 +84,24 @@
         $(".list-group-item", "#tagList").each(function() {
             var url = $(this).attr("href");
             $(this).attr("href", "#").bind("click", function() {
-                $.ajax({
-                    type: "GET",
-                    url: url,
-                    success: function(data) {
-                        initDialog(data, function(event, xhr, settings) {
-                            alert("Succeed.");
-                            formDialog.setOnClose(function() { location.reload(); });
-                            formDialog.close();
-                        });
-                        formDialog.show({backdrop: "static"});
-                    }
-                });
+                if (loggedIn) {
+                    $.ajax({
+                        type: "GET",
+                        url: url,
+                        success: function (data) {
+                            initDialog(data, function (event, xhr, settings) {
+                                alert("Succeed.");
+                                formDialog.setOnClose(function () {
+                                    location.reload();
+                                });
+                                formDialog.close();
+                            });
+                            formDialog.show({backdrop: "static"});
+                        }
+                    });
+                } else {
+                    location.href = url;
+                }
                 return false;
             });
         });

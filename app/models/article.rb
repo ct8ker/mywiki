@@ -31,4 +31,12 @@ class Article < ActiveRecord::Base
     article
   end
 
+  def self.search_by_tag(tag_id)
+    Article
+      .joins(:articles_tags, :user)
+      .where('articles_tags.tag_id = ?', tag_id)
+      .where(private: PUBLIC)
+      .order('created_at desc').limit(5).load
+  end
+
 end

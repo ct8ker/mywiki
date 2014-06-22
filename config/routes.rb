@@ -7,8 +7,9 @@ Rails.application.routes.draw do
   devise_for  :users
 
   # Articles
-  get         'wiki/:title', controller: :articles, action: :show
-  post        'articles/preview', controller: :articles, action: :preview
+  get         'wiki/:title',        controller: :articles, action: :show
+  get         'articles/:tag_name', controller: :articles, action: :index
+  post        'articles/preview',   controller: :articles, action: :preview
   resources   :articles, only: ['new', 'create', 'edit', 'update']
 
   # Tags

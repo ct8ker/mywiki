@@ -16,7 +16,7 @@ module ApplicationHelper
       model.errors.full_messages.each do |msg|
         messages << "<li>#{msg}</li>"
       end
-      " <div class=\"alert alert-danger\"><ul>#{messages}</ul></div>".html_safe
+      "<div class=\"alert alert-danger\"><ul>#{messages}</ul></div>".html_safe
     else
       ''
     end
