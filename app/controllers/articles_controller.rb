@@ -3,7 +3,7 @@
 #
 class ArticlesController < ApplicationController
 
-  before_filter :authenticate_user!, except: [:articles, :show]
+  before_filter :authenticate_user!, except: [:show]
 
   #
   # Show article
