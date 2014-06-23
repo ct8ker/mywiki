@@ -13,7 +13,7 @@
                 <tbody>
                 <% @articles.each do |article|%>
                     <tr>
-                        <td><%= link_to article.title, action: :show, title: article.title %></td>
+                        <td><%= link_to article.title, controller: :articles, action: :show, title: article.title %></td>
                         <td><%= article.user.login_id %></td>
                         <td><%= l article.updated_at, format: '%Y/%m/%d %H:%M:%S' %></td>
                     </tr>

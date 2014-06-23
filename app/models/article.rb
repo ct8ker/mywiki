@@ -36,7 +36,7 @@ class Article < ActiveRecord::Base
       .joins(:articles_tags, :user)
       .where('articles_tags.tag_id = ?', tag_id)
       .where(private: PUBLIC)
-      .order('created_at desc').limit(5).load
+      .order('created_at desc').limit(10).load
   end
 
 end

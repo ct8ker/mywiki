@@ -3,13 +3,26 @@
 #
 class TagsController < ApplicationController
 
-  before_filter :authenticate_user!, except: [:index]
+  before_filter :authenticate_user!, except: [:index, :articles]
 
   #
   # Tag index
   #
   def index
     @tags = Tag.all
+  end
+
+  #
+  # Article list
+  #
+  def articles
+    @tag = Tag.find_by_name(params[:name])
+    raise ActiveRecord::RecordNotFound unless @tag
+
+    if request.xhr?
+    else
+      @articles = Article.search_by_tag(@tag.id)
+    end
   end
 
   #

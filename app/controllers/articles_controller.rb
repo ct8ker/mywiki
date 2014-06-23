@@ -3,20 +3,7 @@
 #
 class ArticlesController < ApplicationController
 
-  before_filter :authenticate_user!, except: [:index, :show]
-
-  #
-  # Article list
-  #
-  def index
-    @tag = Tag.find_by_name(params[:tag_name])
-    raise ActiveRecord::RecordNotFound unless @tag
-
-    if request.xhr?
-    else
-      @articles = Article.search_by_tag(@tag.id)
-    end
-  end
+  before_filter :authenticate_user!, except: [:articles, :show]
 
   #
   # Show article

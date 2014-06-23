@@ -15,7 +15,7 @@
         <% if user_signed_in? %>
             <%= link_to(tag.name, url_for(controller: :tags, action: :edit, id: tag.id), class: 'list-group-item') %>
         <% else %>
-            <%= link_to(tag.name, url_for(controller: :articles, action: :index, tag_name: tag.name), class: 'list-group-item') %>
+            <%= link_to(tag.name, url_for(controller: :tags, action: :articles, name: tag.name), class: 'list-group-item') %>
         <% end %>
     <% end %>
     </div>

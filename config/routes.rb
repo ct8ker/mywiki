@@ -8,12 +8,11 @@ Rails.application.routes.draw do
 
   # Articles
   get         'wiki/:title',        controller: :articles, action: :show
-  get         'articles/:tag_name', controller: :articles, action: :index
   post        'articles/preview',   controller: :articles, action: :preview
   resources   :articles, only: ['new', 'create', 'edit', 'update']
 
   # Tags
-  get         'tags/:name/articles', controller: :tags, action: :show
+  get         'tags/:name/articles', controller: :tags, action: :articles
   resources   :tags, only: ['index', 'new', 'create', 'edit', 'update', 'destroy']
 
   # Not found
