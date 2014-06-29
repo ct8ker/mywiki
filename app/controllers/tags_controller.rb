@@ -19,9 +19,14 @@ class TagsController < ApplicationController
     @tag = Tag.find_by_name(params[:name])
     raise ActiveRecord::RecordNotFound unless @tag
 
+    options = {}
+    if user_signed_in?
+      options[:user_id] = current_user.id
+    end
+
     if request.xhr?
     else
-      @articles = Article.search_by_tag(@tag.id)
+      @articles = Article.search_by_tag(@tag.id, options)
     end
   end
 

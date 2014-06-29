@@ -38,12 +38,22 @@ class Article < ActiveRecord::Base
   #
   # Search article by tag name
   #
-  def self.search_by_tag(tag_id)
+  def self.search_by_tag(tag_id, options = {})
+    article_table = Article.arel_table
+    conditions = article_table[:shared_type].eq(shared_types[:open])
+
+    if options[:user_id].present?
+      conditions = conditions.or(
+          article_table[:user_id].eq(options[:user_id])
+      )
+    end
+
     Article
-      .open
+      .includes(:user)
       .joins(:articles_tags, :user)
+      .where(conditions)
       .where('articles_tags.tag_id = ?', tag_id)
-      .order('created_at desc').limit(10).load
+      .order('articles.created_at desc').limit(10).load
   end
 
 end
