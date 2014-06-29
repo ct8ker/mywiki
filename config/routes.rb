@@ -7,12 +7,12 @@ Rails.application.routes.draw do
   devise_for  :users
 
   # Articles
-  get         'wiki/:title',        controller: :articles, action: :show
+  get         'wiki/:title',        controller: :articles, action: :show, constraints: {title: /.*/}
   post        'articles/preview',   controller: :articles, action: :preview
   resources   :articles, only: ['new', 'create', 'edit', 'update']
 
   # Tags
-  get         'tags/:name/articles', controller: :tags, action: :articles
+  get         'tags/:name/articles', controller: :tags, action: :articles, constraints: {name: /.*/}
   resources   :tags, only: ['index', 'new', 'create', 'edit', 'update', 'destroy']
 
   # Not found
