@@ -43,12 +43,12 @@
                 <div class="col-sm-10">
                     <div class="radio">
                         <label>
-                            <%= f.radio_button :private, 1 %> Private
+                            <%= f.radio_button :shared_type, :closed %> Private
                         </label>
                     </div>
                     <div class="radio">
                         <label>
-                            <%= f.radio_button :private, 0 %> Public
+                            <%= f.radio_button :shared_type, :open %> Public
                         </label>
                     </div>
                 </div>

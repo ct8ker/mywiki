@@ -102,7 +102,7 @@ class ArticlesController < ApplicationController
   private
 
   def article_params
-    params.require(:article).permit(:title, :content, :private, :lock_version)
+    params.require(:article).permit(:title, :content, :shared_type, :lock_version)
   end
 
   def tag_params

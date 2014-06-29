@@ -4,7 +4,7 @@ class CreateArticles < ActiveRecord::Migration
       t.string  :title,    null: false, limit: 50
       t.text    :content,  null: false
       t.integer :user_id,  null: false
-      t.column  :private, :tinyint, null: false, default: 0
+      t.column  :shared_type, :tinyint, null: false, default: 0
 
       t.timestamps
       t.datetime :deleted_at
